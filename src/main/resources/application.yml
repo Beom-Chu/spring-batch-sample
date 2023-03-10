@@ -1,1 +1,38 @@
+spring:
+  profiles:
+    active: mysql
 
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:mem:spring:batch:db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  batch:
+    jdbc:
+      initialize-schema: embedded
+# spring.batch.jdbc.initialize-schema 설정
+### always : 메타 DB 생성 스크립트 항상 실행
+###          RDBMS 설정이 되어 있을 경우 내장 DB보다 우선적으로 실행
+### embedded : 내장 DB일 때만 실행되며 스키마가 자동 생성됨. 기본값.
+### never : 메타 DB 생성 스크립트 항상 실행 안함.
+###         내장 DB일 경우 메타 DB 생성이 안되기 때문에 오류 발생
+###         운영에서 수동으로 메타 DB 생성 후 설정하는 것을 권장.
+
+---
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    url: jdbc:mysql://localhost:3306/springbatch?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: bumsoo
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  batch:
+    jdbc:
+      initialize-schema: always

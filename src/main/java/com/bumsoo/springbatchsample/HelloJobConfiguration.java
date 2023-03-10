@@ -16,10 +16,14 @@ public class HelloJobConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
+    private static final String JOB_NAME = "helloJob";
+    private static final String STEP_NAME1 = "helloStep1";
+    private static final String STEP_NAME2 = "helloStep2";
+
     @Bean
     public Job helloJob() {
         return jobBuilderFactory
-                .get("helloJob")
+                .get(JOB_NAME)
                 .start(helloStep1())
                 .next(helloStep2())
                 .build();
@@ -28,7 +32,7 @@ public class HelloJobConfiguration {
     @Bean
     public Step helloStep1() {
         return stepBuilderFactory
-                .get("helloStep1")
+                .get(STEP_NAME1)
                 .tasklet((stepContribution, chunkContext) -> {
                     System.out.println("hello spring batch 1");
                     /* RepeatStatus.FINISHED = 반복종료
@@ -41,7 +45,7 @@ public class HelloJobConfiguration {
     @Bean
     public Step helloStep2() {
         return stepBuilderFactory
-                .get("helloStep2")
+                .get(STEP_NAME2)
                 .tasklet((stepContribution, chunkContext) -> {
                     System.out.println("hello spring batch 22");
                     return RepeatStatus.FINISHED;
