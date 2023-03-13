@@ -1,4 +1,4 @@
-package com.bumsoo.springbatchsample;
+package com.bumsoo.springbatchsample.job.instance.test;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -9,7 +9,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JobRunner implements ApplicationRunner {
 

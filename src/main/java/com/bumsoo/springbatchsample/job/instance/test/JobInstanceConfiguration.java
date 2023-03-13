@@ -1,4 +1,4 @@
-package com.bumsoo.springbatchsample;
+package com.bumsoo.springbatchsample.job.instance.test;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +22,15 @@ public class JobInstanceConfiguration {
     public Job jobInstanceTestJob() {
         return jobBuilderFactory
                 .get("jobInstanceTestJob")
-                .start(step1())
-                .next(step2())
+                .start(jobInstanceTestStep1())
+                .next(jobInstanceTestStep2())
                 .build();
     }
 
     @Bean
-    public Step step1() {
+    public Step jobInstanceTestStep1() {
         return stepBuilderFactory
-                .get("step1")
+                .get("jobInstanceTestStep1")
                 .tasklet((stepContribution, chunkContext) -> {
                     log.info("[[[step1");
                     return RepeatStatus.FINISHED;
@@ -39,9 +39,9 @@ public class JobInstanceConfiguration {
     }
 
     @Bean
-    public Step step2() {
+    public Step jobInstanceTestStep2() {
         return stepBuilderFactory
-                .get("step2")
+                .get("jobInstanceTestStep2")
                 .tasklet((stepContribution, chunkContext) -> {
                     log.info("[[[step2");
                     return RepeatStatus.FINISHED;
