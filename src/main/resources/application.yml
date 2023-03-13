@@ -36,3 +36,5 @@ spring:
   batch:
     jdbc:
       initialize-schema: always
+    job:
+      enabled: false # spring.batch.job.enabled = false : Job 자동실행 금지.
