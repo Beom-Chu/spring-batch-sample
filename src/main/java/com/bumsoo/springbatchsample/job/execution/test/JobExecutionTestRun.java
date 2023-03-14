@@ -1,4 +1,4 @@
-package com.bumsoo.springbatchsample.job.parameter.test;
+package com.bumsoo.springbatchsample.job.execution.test;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -9,25 +9,22 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
-//@Component
+@Component
 @RequiredArgsConstructor
-public class JobParameterTestRun implements ApplicationRunner {
-
+public class JobExecutionTestRun implements ApplicationRunner {
     private final JobLauncher jobLauncher;
-    private final Job jobParameterTestJob;
+    private final Job jobExecutionTestJob;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        /* 동일한 파라미터로 동일한 Job 실행 불가 */
+        /* 동일한 Job, Parameter는 실행이 불가능 하지만,
+        * Job이 실패한 경우 동일한 Job, Parameter로 재실행 가능 (성공할때까지).
+        * JobExecution은 계속 누적 됨 */
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("str", "user")
-                .addDate("dt" , new Date())
-                .addLong("l", 123451L)
-                .addDouble("db", 1234.561)
+                .addString("name", "testException")
                 .toJobParameters();
 
-        jobLauncher.run(jobParameterTestJob, jobParameters);
+        jobLauncher.run(jobExecutionTestJob, jobParameters);
     }
 }
