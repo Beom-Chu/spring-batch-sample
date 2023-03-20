@@ -36,5 +36,7 @@ spring:
   batch:
     jdbc:
       initialize-schema: always
+      table-prefix: SYSTEM_ # Meta Table Prefix 설정
     job:
-      enabled: false # spring.batch.job.enabled = false : Job 자동실행 금지.
+#      enabled: false # spring.batch.job.enabled = false : Job 자동실행 금지.
+      names: ${job.name:NONE} # 실행시킬 Job 이름
