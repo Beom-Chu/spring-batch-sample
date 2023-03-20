@@ -37,7 +37,7 @@ public class JobLauncherController {
                 .addDate("date", new Date())
                 .toJobParameters();
 
-        /* Default : 비동기 실행 */
+        /* Default : 동기 실행 */
         jobLauncher.run(jobLauncherJob, jobParameters);
 
         return "batch-sync completed!!";
