@@ -1,4 +1,4 @@
-package com.bumsoo.springbatchsample.flow.job.test;
+package com.bumsoo.springbatchsample.flat.file.test;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -10,12 +10,12 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 @RequiredArgsConstructor
-public class TestFlowJobRun implements ApplicationRunner {
+public class FlatFileItemReaderTestRun implements ApplicationRunner {
 
     private final JobLauncher jobLauncher;
-    private final Job testFlowJob;
+    private final Job flatFileItemReaderTestJob;
 
     private final Environment env;
     @Override
@@ -24,11 +24,11 @@ public class TestFlowJobRun implements ApplicationRunner {
         String name = env.getProperty("name");
 
         System.out.println("[[[env.getProperty(\"name\") = " + name);
-        
+
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("name", name)
                 .toJobParameters();
 
-        jobLauncher.run(testFlowJob, jobParameters);
+        jobLauncher.run(flatFileItemReaderTestJob, jobParameters);
     }
 }
