@@ -27,7 +27,11 @@ public class SimpleJobTestConfig {
                 .next(simpleJobTestStep2())
                 .incrementer(new RunIdIncrementer())            /* JobParameter 의 값을 자동을 증가해 주는 JobParametersIncrementer 설정 */
                 .preventRestart()                               /* Job 의 재 시작 가능 여부 설정, 기본값 true */
-                .validator(new DefaultJobParametersValidator()) /* JobParameter 를 실행하기 전에 올바른 구성이 되었는지 검증하는 JobParametersValidator 설정 */
+                .validator(new DefaultJobParametersValidator(   /* JobParameter 를 실행하기 전에 올바른 구성이 되었는지 검증하는 JobParametersValidator 설정 */
+                        new String[]{"name"}            /* requiredKeys : 필수 */
+                        ,new String[]{"age", "year"}    /* optionalKeys : 선택 */
+                ))
+//                .validator(new CustomJobParametersValidator()) /* DefaultJobParametersValidator 사용해도 되고 Custom 생성도 가능 */
                 .listener(new JobExecutionListener() {          /* Job 라이프 사이클의 특정 시점에 콜백 제공받도록 JobExecutionListener 설정  */
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
