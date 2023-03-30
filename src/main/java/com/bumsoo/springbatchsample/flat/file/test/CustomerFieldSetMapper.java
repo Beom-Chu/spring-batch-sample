@@ -1,5 +1,6 @@
 package com.bumsoo.springbatchsample.flat.file.test;
 
+import com.bumsoo.springbatchsample.dto.Customer;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;

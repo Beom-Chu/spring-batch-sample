@@ -1,5 +1,6 @@
 package com.bumsoo.springbatchsample.flat.file.test;
 
+import com.bumsoo.springbatchsample.dto.Customer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
