@@ -18,7 +18,7 @@ import org.springframework.core.io.FileSystemResource;
 import java.util.Arrays;
 import java.util.List;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class FlatFileItemWriterTestConfig {
     private final JobBuilderFactory jobBuilderFactory;
@@ -33,7 +33,6 @@ public class FlatFileItemWriterTestConfig {
                 .build();
     }
 
-    @Bean
     public Step flatFileItemWriterTestStep() {
         return stepBuilderFactory
                 .get("flatFileItemWriterTestStep")
@@ -43,7 +42,6 @@ public class FlatFileItemWriterTestConfig {
                 .build();
     }
 
-    @Bean
     public ItemReader<? extends Customer> flatFileItemWriterTestItemReader() {
         System.out.println("[[[FlatFileItemWriterTestConfig.flatFileItemWriterTestItemReader");
         List<Customer> customers = Arrays.asList(
@@ -56,7 +54,6 @@ public class FlatFileItemWriterTestConfig {
         return new ListItemReader<>(customers);
     }
 
-    @Bean
     public ItemWriter<? super Customer> flatFileItemWriterTestItemWriter() {
         System.out.println("[[[FlatFileItemWriterTestConfig.flatFileItemWriterTestItemWriter");
         return new FlatFileItemWriterBuilder<>()
