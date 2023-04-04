@@ -1,4 +1,4 @@
-package com.bumsoo.springbatchsample.flat.file.test;
+package com.bumsoo.springbatchsample.job.flat.file.item.reader.test;
 
 import com.bumsoo.springbatchsample.dto.Customer;
 import lombok.RequiredArgsConstructor;

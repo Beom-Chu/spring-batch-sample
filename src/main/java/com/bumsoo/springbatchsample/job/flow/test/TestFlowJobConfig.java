@@ -1,4 +1,4 @@
-package com.bumsoo.springbatchsample.flow.job.test;
+package com.bumsoo.springbatchsample.job.flow.test;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
