@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.List;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class JdbcBatchItemWriterTestJobConfig {
     private final JobBuilderFactory jobBuilderFactory;
@@ -36,7 +36,7 @@ public class JdbcBatchItemWriterTestJobConfig {
                 .build();
     }
 
-    @Bean
+//    @Bean
     public Step jdbcBatchItemWriterTestStep() {
         System.out.println("JdbcBatchItemWriterTestJobConfig.jdbcBatchItemWriterTestStep");
 
