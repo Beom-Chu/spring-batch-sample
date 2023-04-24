@@ -9,7 +9,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SpringBatchSampleApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringBatchSampleApplication.class, args);
+        try {
+            SpringApplication.run(SpringBatchSampleApplication.class, args);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            System.exit(0);
+        }
     }
 
 }
