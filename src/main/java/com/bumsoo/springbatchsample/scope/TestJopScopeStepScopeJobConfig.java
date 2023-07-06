@@ -6,6 +6,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,11 +25,16 @@ public class TestJopScopeStepScopeJobConfig {
      * 해당 스코프가 선언되면 빈의 생성이 어플리케이션 구동 시점이 아닌 빈의 실행시점에 이루어진다.
      * @Values를 주입해서 빈의 실행 시점에 값을 참조할 수 있으며 일종의 Lazy Binding이 가능해진다.
      * @Values를 사용할 경우 빈 선언문에 @JobScope, @StepScope를 정의하지 않으면 오류가 발생하므로 반드시 선언해야 한다.
+     *
+     * jobParameters와 jobExecutionContext는 @JobScope, @StepScope 모두 사용 가능
+     * stepExecutionContext는 @StepScope에서만 사용 가능
+     *
      */
     @Bean
     public Job testJopScopeStepScopeJob(){
         return jobBuilderFactory
                 .get("testJopScopeStepScopeJob")
+                .incrementer(new RunIdIncrementer())
                 .start(testJopScopeStepScopeStep1(null))
                 .next(testJopScopeStepScopeStep2())
                 .listener(new JobExecutionListener() {
@@ -47,9 +53,10 @@ public class TestJopScopeStepScopeJobConfig {
     @Bean
     @JobScope
     public Step testJopScopeStepScopeStep1(@Value("#{jobParameters['message']}") String message) {
+        System.out.println("[[[TestJopScopeStepScopeJobConfig.testJopScopeStepScopeStep1");
         System.out.println("[[[message = " + message);
         return stepBuilderFactory.get("testJopScopeStepScopeStep1")
-                .tasklet(tasklet1(null))
+                .tasklet(tasklet1(null, null))
                 .build();
     }
 
@@ -74,8 +81,9 @@ public class TestJopScopeStepScopeJobConfig {
 
     @Bean
     @StepScope
-    public Tasklet tasklet1(@Value("#{jobExecutionContext['name1']}") String name1) {
+    public Tasklet tasklet1(@Value("#{jobExecutionContext['name1']}") String name1, @Value("#{jobParameters['message']}") String message) {
         System.out.println("[[[name1 = " + name1);
+        System.out.println("[[[message = " + message);
         return (stepContribution, chunkContext) -> {
             System.out.println("[[[TestJopScopeStepScopeJobConfig.tasklet1");
             return RepeatStatus.FINISHED;
