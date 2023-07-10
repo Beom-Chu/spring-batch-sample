@@ -1,4 +1,4 @@
-package com.bumsoo.springbatchsample.chunk.composite.writer;
+package com.bumsoo.springbatchsample.chunk.composite.writer.test;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
