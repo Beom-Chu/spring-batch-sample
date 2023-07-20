@@ -7,7 +7,9 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +26,7 @@ public class FlatFileItemReaderTestConfig {
     public Job flatFileItemReaderTestJob() {
         return jobBuilderFactory
                 .get("flatFileItemReaderTestJob")
+                .incrementer(new RunIdIncrementer())
                 .start(flatFileItemReaderTestStep1())
                 .build();
     }
@@ -34,13 +37,13 @@ public class FlatFileItemReaderTestConfig {
         return stepBuilderFactory
                 .get("flatFileItemReaderTestStep1")
                 .chunk(5)
-                .reader(itemReader())
+                .reader(flatFileItemReaderTestReader2())
                 .writer(list -> System.out.println("[[[list = " + list))
                 .build();
     }
 
     @Bean
-    public FlatFileItemReader itemReader() {
+    public FlatFileItemReader flatFileItemReaderTestReader1() {
         FlatFileItemReader<Customer> itemReader = new FlatFileItemReader<>();
         itemReader.setResource(new ClassPathResource("/customer.csv"));
 
@@ -52,6 +55,18 @@ public class FlatFileItemReaderTestConfig {
         itemReader.setLinesToSkip(1);
 
         return itemReader;
+    }
+
+    @Bean
+    public FlatFileItemReader flatFileItemReaderTestReader2() {
+        return new FlatFileItemReaderBuilder<Customer>()
+                .name("flatFileItemReaderTestReader2")
+                .resource(new ClassPathResource("/customer.csv"))
+                .fieldSetMapper(new CustomerFieldSetMapper())
+                .linesToSkip(1)
+                .delimited().delimiter(",")
+                .names("name", "age", "year")
+                .build();
     }
 
 }
