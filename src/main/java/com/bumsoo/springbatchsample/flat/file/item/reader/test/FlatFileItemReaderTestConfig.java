@@ -43,7 +43,7 @@ public class FlatFileItemReaderTestConfig {
     }
 
     @Bean
-    public FlatFileItemReader flatFileItemReaderTestReader1() {
+    public FlatFileItemReader<Customer> flatFileItemReaderTestReader1() {
         FlatFileItemReader<Customer> itemReader = new FlatFileItemReader<>();
         itemReader.setResource(new ClassPathResource("/customer.csv"));
 
@@ -57,8 +57,11 @@ public class FlatFileItemReaderTestConfig {
         return itemReader;
     }
 
+    /**
+     * DelimitedLineTokenizer
+     */
     @Bean
-    public FlatFileItemReader flatFileItemReaderTestReader2() {
+    public FlatFileItemReader<Customer> flatFileItemReaderTestReader2() {
         return new FlatFileItemReaderBuilder<Customer>()
                 .name("flatFileItemReaderTestReader2")
                 .resource(new ClassPathResource("/customer.csv"))
@@ -68,5 +71,4 @@ public class FlatFileItemReaderTestConfig {
                 .names("name", "age", "year")
                 .build();
     }
-
 }
