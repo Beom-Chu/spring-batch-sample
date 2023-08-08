@@ -43,3 +43,8 @@ spring:
     job:
       enabled: true # spring.batch.job.enabled = false : Job 자동실행 금지.
       names: ${job.name:NONE} # 실행시킬 Job 이름
+  jpa:
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl # 언더바 자동변경 방지
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl  # 언더바 자동변경 방지

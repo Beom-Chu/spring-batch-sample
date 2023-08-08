@@ -1,5 +1,6 @@
 package com.bumsoo.springbatchsample.jdbc.cursor.item.reader;
 
+import com.bumsoo.springbatchsample.dto.Customer2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -42,12 +43,12 @@ public class JdbcCursorItemReaderTestJobConfig {
     }
 
     @Bean
-    ItemReader<Customer> jdbcCursorItemReaderTestReader() {
-        return new JdbcCursorItemReaderBuilder<Customer>()
+    ItemReader<Customer2> jdbcCursorItemReaderTestReader() {
+        return new JdbcCursorItemReaderBuilder<Customer2>()
                 .name("jdbcCursorItemReaderTestReader")
                 .fetchSize(chunkSize)
                 .sql("select id, firstName, lastName, birthDate from customer2 where firstName like ? order by lastName, firstName")
-                .beanRowMapper(Customer.class)
+                .beanRowMapper(Customer2.class)
                 .queryArguments("A%")
                 .dataSource(dataSource)
                 .build()
