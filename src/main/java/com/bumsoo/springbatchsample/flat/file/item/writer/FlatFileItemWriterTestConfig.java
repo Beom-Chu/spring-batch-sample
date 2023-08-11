@@ -18,7 +18,7 @@ import org.springframework.core.io.FileSystemResource;
 import java.util.Arrays;
 import java.util.List;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class FlatFileItemWriterTestConfig {
     private final JobBuilderFactory jobBuilderFactory;
@@ -33,15 +33,18 @@ public class FlatFileItemWriterTestConfig {
                 .build();
     }
 
+    @Bean
     public Step flatFileItemWriterTestStep() {
         return stepBuilderFactory
                 .get("flatFileItemWriterTestStep")
                 .<Customer,Customer>chunk(2)
                 .reader(flatFileItemWriterTestItemReader())
-                .writer(flatFileItemWriterTestItemWriter())
+//                .writer(flatFileItemWriterTestItemWriter_delimited())
+                .writer(flatFileItemWriterTestItemWriter_format())
                 .build();
     }
 
+    @Bean
     public ItemReader<? extends Customer> flatFileItemWriterTestItemReader() {
         System.out.println("[[[FlatFileItemWriterTestConfig.flatFileItemWriterTestItemReader");
         List<Customer> customers = Arrays.asList(
@@ -54,14 +57,36 @@ public class FlatFileItemWriterTestConfig {
         return new ListItemReader<>(customers);
     }
 
-    public ItemWriter<? super Customer> flatFileItemWriterTestItemWriter() {
-        System.out.println("[[[FlatFileItemWriterTestConfig.flatFileItemWriterTestItemWriter");
+    /**
+     * delimited
+     */
+    @Bean
+    public ItemWriter<? super Customer> flatFileItemWriterTestItemWriter_delimited() {
+        System.out.println("[[[FlatFileItemWriterTestConfig.flatFileItemWriterTestItemWriter_delimited");
         return new FlatFileItemWriterBuilder<>()
-                .name("flatFileItemWriterTestItemWriter")
+                .name("flatFileItemWriterTestItemWriter_delimited")
                 .resource(new FileSystemResource("src\\main\\resources\\FlatFileWriterTest.csv"))
                 .delimited().delimiter(",")
                 .names("name", "age", "year")
 //                .append(true) /* 존재하는 파일에 내용 추가하기 */
+//                .shouldDeleteIfExists(true) /* 파일이 이미 존재하면 삭제 */
+//                .shouldDeleteIfEmpty(true) /* 파일 내용이 비어 있으면 삭제 */
+                .build();
+    }
+
+    /**
+     * format
+     */
+    @Bean
+    public ItemWriter<? super Customer> flatFileItemWriterTestItemWriter_format() {
+        System.out.println("[[[FlatFileItemWriterTestConfig.flatFileItemWriterTestItemWriter_format");
+        return new FlatFileItemWriterBuilder<>()
+                .name("flatFileItemWriterTestItemWriter_format")
+                .resource(new FileSystemResource("src\\main\\resources\\FlatFileWriterTest_format.txt"))
+                .formatted()
+                .format("%-4s%-3d%-5s")
+                .names("name", "age", "year")
+                .append(true) /* 존재하는 파일에 내용 추가하기 */
 //                .shouldDeleteIfExists(true) /* 파일이 이미 존재하면 삭제 */
 //                .shouldDeleteIfEmpty(true) /* 파일 내용이 비어 있으면 삭제 */
                 .build();
