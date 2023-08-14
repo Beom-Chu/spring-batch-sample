@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
-public class StaxEventItemReaderConfig {
+public class StaxEventItemReaderTestJobConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
