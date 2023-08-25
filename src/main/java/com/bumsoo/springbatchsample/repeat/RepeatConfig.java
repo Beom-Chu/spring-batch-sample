@@ -9,6 +9,8 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.*;
 import org.springframework.batch.repeat.CompletionPolicy;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.batch.repeat.exception.ExceptionHandler;
+import org.springframework.batch.repeat.exception.SimpleLimitExceptionHandler;
 import org.springframework.batch.repeat.policy.CompositeCompletionPolicy;
 import org.springframework.batch.repeat.policy.SimpleCompletionPolicy;
 import org.springframework.batch.repeat.policy.TimeoutTerminationPolicy;
@@ -56,18 +58,21 @@ public class RepeatConfig {
 //                        repeatTemplate.setCompletionPolicy(new TimeoutTerminationPolicy(1000)); /* 시간만큼 반복 */
 
                         /* 반복 종료 조건을 여러가지 혼합, 가장 먼저 달성되는 조건으로 종료됨 */
-                        CompositeCompletionPolicy completionCompletionPolicy = new CompositeCompletionPolicy();
-                        CompletionPolicy[] completionPolicies = new CompletionPolicy[]{
-                                new SimpleCompletionPolicy(2),
-                                new TimeoutTerminationPolicy(1000)
-                        };
-                        completionCompletionPolicy.setPolicies(completionPolicies);
-                        repeatTemplate.setCompletionPolicy(completionCompletionPolicy);
+//                        CompositeCompletionPolicy completionCompletionPolicy = new CompositeCompletionPolicy();
+//                        CompletionPolicy[] completionPolicies = new CompletionPolicy[]{
+//                                new SimpleCompletionPolicy(2),
+//                                new TimeoutTerminationPolicy(1000)
+//                        };
+//                        completionCompletionPolicy.setPolicies(completionPolicies);
+//                        repeatTemplate.setCompletionPolicy(completionCompletionPolicy);
                         /* ---------------------------------------------------------------------------------------- */
+
+                        repeatTemplate.setExceptionHandler(simpleLimitExceptionHandler()); /* 횟수만큼 에러 발생시 반복 종료 */
 
                         repeatTemplate.iterate(repeatContext -> {
                             System.out.println("[[[repeatTemplate is testing.");
-                            return RepeatStatus.CONTINUABLE;
+                            throw new Exception("ERROR!!");
+//                            return RepeatStatus.CONTINUABLE;
                         });
 
                         return s;
@@ -75,5 +80,10 @@ public class RepeatConfig {
                 })
                 .writer(list -> list.forEach(System.out::println))
                 .build();
+    }
+
+    @Bean
+    ExceptionHandler simpleLimitExceptionHandler() {
+        return new SimpleLimitExceptionHandler(3); /* 횟수만큼 에러 발생시 반복 종료 */
     }
 }
