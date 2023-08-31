@@ -6,11 +6,15 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.step.skip.LimitCheckingItemSkipPolicy;
+import org.springframework.batch.core.step.skip.SkipPolicy;
 import org.springframework.batch.item.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -75,8 +79,24 @@ public class SkipTestJobConfig {
                     }
                 })
                 .faultTolerant() /* 내결함성 기능 활성화 */
-                .skip(SkippableException.class)
-                .skipLimit(3)
+
+                /* skip, skipLimit 사용 */
+//                .skip(SkippableException.class)
+//                .skipLimit(3)
+
+                /* skipPolicy 사용 */
+                .skipPolicy(limitCheckingItemSkipPolicy())
                 .build();
+    }
+
+    @Bean
+    SkipPolicy limitCheckingItemSkipPolicy() {
+
+        Map<Class<? extends Throwable>, Boolean> exceptionClass = new HashMap<>();
+        exceptionClass.put(SkippableException.class, true);
+
+        LimitCheckingItemSkipPolicy limitCheckingItemSkipPolicy = new LimitCheckingItemSkipPolicy(3, exceptionClass);
+
+        return limitCheckingItemSkipPolicy;
     }
 }
