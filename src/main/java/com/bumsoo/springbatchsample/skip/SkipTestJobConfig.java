@@ -47,7 +47,8 @@ public class SkipTestJobConfig {
                         System.out.println("SkipTestJobConfig.read");
                         i++;
                         if (i == 3) {
-                            throw new SkippableException("Read failed cnt : " + ++cnt);
+//                            throw new SkippableException("Read failed cnt : " + ++cnt);
+                            throw new NoSkippableException("Read failed cnt : " + ++cnt);
                         }
                         String s = i > 20 ? null : String.valueOf(i);
                         return s;
@@ -81,11 +82,15 @@ public class SkipTestJobConfig {
                 .faultTolerant() /* 내결함성 기능 활성화 */
 
                 /* skip, skipLimit 사용 */
-//                .skip(SkippableException.class)
-//                .skipLimit(3)
+                .skip(SkippableException.class)
+                .skipLimit(3)
 
                 /* skipPolicy 사용 */
-                .skipPolicy(limitCheckingItemSkipPolicy())
+//                .skipPolicy(limitCheckingItemSkipPolicy())
+
+                /* noSkip 사용 */
+                .noSkip(NoSkippableException.class)
+
                 .build();
     }
 
@@ -95,8 +100,6 @@ public class SkipTestJobConfig {
         Map<Class<? extends Throwable>, Boolean> exceptionClass = new HashMap<>();
         exceptionClass.put(SkippableException.class, true);
 
-        LimitCheckingItemSkipPolicy limitCheckingItemSkipPolicy = new LimitCheckingItemSkipPolicy(3, exceptionClass);
-
-        return limitCheckingItemSkipPolicy;
+        return new LimitCheckingItemSkipPolicy(3, exceptionClass);
     }
 }
