@@ -1,8 +1,9 @@
-package com.bumsoo.springbatchsample.retry;
+package com.bumsoo.springbatchsample.retry.api;
 
+import com.bumsoo.springbatchsample.retry.RetryableException;
 import org.springframework.batch.item.ItemProcessor;
 
-public class RetryTestProcessor implements ItemProcessor<String, String> {
+public class RetryApiTestProcessor implements ItemProcessor<String, String> {
 
     private int cnt = 0;
     @Override
