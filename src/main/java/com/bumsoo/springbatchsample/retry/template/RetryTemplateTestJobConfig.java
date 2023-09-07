@@ -45,6 +45,8 @@ public class RetryTemplateTestJobConfig {
                 .processor(retryTemplateTestProcessor())
                 .writer(list -> list.forEach(System.out::println))
                 .faultTolerant()
+                .skip(RetryableException.class)
+                .skipLimit(2)
                 .build();
     }
 
