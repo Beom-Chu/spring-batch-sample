@@ -3,9 +3,12 @@ package com.bumsoo.springbatchsample.retry.template;
 import com.bumsoo.springbatchsample.retry.RetryableException;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.classify.BinaryExceptionClassifier;
+import org.springframework.classify.Classifier;
 import org.springframework.retry.RecoveryCallback;
 import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;
+import org.springframework.retry.support.DefaultRetryState;
 import org.springframework.retry.support.RetryTemplate;
 
 public class RetryTemplateTestProcessor implements ItemProcessor<String, Customer> {
@@ -17,6 +20,8 @@ public class RetryTemplateTestProcessor implements ItemProcessor<String, Custome
 
     @Override
     public Customer process(String o) throws Exception {
+
+        Classifier<Throwable, Boolean> rollbackClassifier = new BinaryExceptionClassifier(true);
 
         Customer customer = retryTemplateTestRetryTemplate.execute(
                 new RetryCallback<Customer, RuntimeException>() {
@@ -34,7 +39,9 @@ public class RetryTemplateTestProcessor implements ItemProcessor<String, Custome
                     public Customer recover(RetryContext retryContext) throws Exception {
                         return new Customer(o);
                     }
-                });
+                },
+                new DefaultRetryState(o, rollbackClassifier)
+        );
         return customer;
     }
 }
