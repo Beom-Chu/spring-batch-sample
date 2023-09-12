@@ -1,4 +1,4 @@
-package com.bumsoo.springbatchsample.listener;
+package com.bumsoo.springbatchsample.listener.job.step;
 
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
